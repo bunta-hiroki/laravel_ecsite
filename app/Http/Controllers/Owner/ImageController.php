@@ -36,8 +36,6 @@ class ImageController extends Controller
     }
 
 
-
-
     // ----ブログ記事取得-----
     public function showBlogs() {
         // $blogs = Blog::orderBy('id', 'DESC')->take(5)->get();

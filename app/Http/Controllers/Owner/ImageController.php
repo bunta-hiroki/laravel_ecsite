@@ -1,7 +1,5 @@
 <?php
 
-<a href=""></a>
-
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
@@ -14,6 +12,7 @@ use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Blog;
+use App\Models\Blogs;
 
 class ImageController extends Controller
 {

@@ -1,5 +1,5 @@
 <?php
-//変更しました
+//変更箇所
 
 namespace App\Http\Controllers\Owner;
 

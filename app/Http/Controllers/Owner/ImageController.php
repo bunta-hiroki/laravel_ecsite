@@ -1,4 +1,5 @@
 <?php
+//変更
 
 namespace App\Http\Controllers\Owner;
 
@@ -41,9 +42,6 @@ class ImageController extends Controller
         dd($blogs);
         return view('user.index',['blogs' => $blogs]);
     }
-
-
-
     
     /**
      * Display a listing of the resource.

@@ -1,4 +1,7 @@
 <?php
+//変更箇所追加
+//変更箇所追加
+//変更箇所追加
 
 namespace App\Http\Controllers\Owner;
 
@@ -21,7 +24,6 @@ class ImageController extends Controller
         $this->middleware('auth:owners');
 
         $this->middleware(function ($request, $next) {
-            
             $id = $request->route()->parameter('image');
             if(!is_null($id)){
                 $imagesOwnerId = Image::findOrFail($id)->owner->id;
@@ -35,7 +37,6 @@ class ImageController extends Controller
         });
     }
 
-
     // ----ブログ記事取得-----
     public function showBlogs() {
         // $blogs = Blog::orderBy('id', 'DESC')->take(5)->get();
@@ -43,9 +44,6 @@ class ImageController extends Controller
         dd($blogs);
         return view('user.index',['blogs' => $blogs]);
     }
-
-
-
     
     /**
      * Display a listing of the resource.
@@ -165,3 +163,11 @@ class ImageController extends Controller
         'status' => 'alert']);
     }
 }
+
+
+
+
+
+
+
+

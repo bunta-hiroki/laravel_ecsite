@@ -21,7 +21,6 @@ class ImageController extends Controller
         $this->middleware('auth:owners');
 
         $this->middleware(function ($request, $next) {
-            
             $id = $request->route()->parameter('image');
             if(!is_null($id)){
                 $imagesOwnerId = Image::findOrFail($id)->owner->id;
@@ -35,6 +34,12 @@ class ImageController extends Controller
         });
     }
 
+
+
+
+
+
+    
 
 
 

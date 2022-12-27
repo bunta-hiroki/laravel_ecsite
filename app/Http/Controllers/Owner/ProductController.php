@@ -68,7 +68,6 @@ class ProductController extends Controller
         $categories = PrimaryCategory::with('secondary')->get();
 
         return view('owner.products.create', compact('shops', 'images', 'categories'));
-
     }
 
     /**

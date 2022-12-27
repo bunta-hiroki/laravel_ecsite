@@ -12,7 +12,6 @@ use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Blog;
-use App\Models\Blogs;
 
 class ImageController extends Controller
 {

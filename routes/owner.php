@@ -11,8 +11,8 @@ use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use App\Http\Controllers\Owner\ShopController;
 use App\Http\Controllers\Owner\ImageController;
 use App\Http\Controllers\Owner\ProductController;
+use App\Http\Controllers\Owner\BlogController;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('owner.welcome');
 // });
 
+
+
 Route::prefix('shops')->middleware('auth:owners')->group(function() {
     Route::get('index', [ShopController::class, 'index'])->name('shops.index');
     Route::get('edit/{shop}', [ShopController::class, 'edit'])->name('shops.edit');
@@ -42,6 +44,9 @@ Route::resource('images', ImageController::class)
 // except(指定したメソットを外せる)
 Route::resource('products', ProductController::class)
 ->middleware('auth:owners')->except(['show']);
+
+Route::resource('blogs', BlogController::class)
+->middleware('auth:owners');
 
 
 Route::get('/dashboard', function () {
@@ -60,7 +65,7 @@ Route::middleware('guest')->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:owners')->group(function () {
   
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->middleware('auth:owners')

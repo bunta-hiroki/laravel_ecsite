@@ -13,12 +13,21 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('user.items.index')" :active="request()->routeIs('user.items.index')">
-                        {{ __('ホーム') }}
+                        商品一覧
                     </x-nav-link>
 
-                    <x-nav-link :href="route('user.list')" >
-                        {{ __('ブログ') }}
+                    <x-nav-link :href="route('user.cart.index')" :active="request()->routeIs('user.cart.index')" >
+                        カートを表示
                     </x-nav-link>
+
+                    <x-nav-link :href="route('user.favorites.favoriteitems')" :active="request()->routeIs('user.favorites.favoriteitems')" >
+                        お気に入りを表示
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('user.blogs.showall')" :active="request()->routeIs('user.blogs.showall')" >
+                        ブログ一覧
+                    </x-nav-link>
+
                 </div>
 
             </div>
@@ -71,6 +80,18 @@
             <x-responsive-nav-link :href="route('user.items.index')" :active="request()->routeIs('user.items.index')">
                 {{ __('ホーム') }}
             </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('user.cart.index')" :active="request()->routeIs('user.cart.index')">
+               カートを表示
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('user.favorites.favoriteitems')" :active="request()->routeIs('user.favorites.favoriteitems')">
+               お気に入りを表示
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('user.blogs.showall')" :active="request()->routeIs('user.blogs.showall')">
+               ブログ一覧
+            </x-responsive-nav-link>
 
         </div>
 
@@ -80,7 +101,7 @@
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
-
+            
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('user.logout') }}">

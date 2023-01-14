@@ -5,45 +5,61 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\PrimaryCategory;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
+use App\jobs\SendThanksMail;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Blog;
-use App\Http\Requests\BlogRequest;
-
 
 class ItemController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth:users');
+        $this->middleware(function ($request, $next) {
+            
+            $id = $request->route()->parameter('item');
+            if(!is_null($id)){
+                //exists()->入ってきた値が存在するか判定
+                $itemId = Product::availableItems()->where('products.id', $id)->exists();
+                    if(!$itemId){ 
+                        abort(404); 
+                    }
+            }
+            return $next($request);
+        });
+
+        // $this->middleware('auth:users');
     }
 
-    public function index() {
-        $stocks = DB::table('t_stocks')
-        ->select('product_id', 
-        DB::raw('sum(quantity) as quantity')) 
-        ->groupBy('product_id') 
-        ->having('quantity', '>', 1);
+    public function index(Request $request) {
+        //同期的に送信
+        // Mail::to('test@test.com')
+        // ->send(new TestMail());
 
-        $products = DB::table('products') ->joinSub($stocks, 'stock', function($join){
-        $join->on('products.id', '=', 'stock.product_id'); })
-        ->join('shops', 'products.shop_id', '=', 'shops.id') ->where('shops.is_selling', true) ->where('products.is_selling', true)
-        ->join('secondary_categories', 'products.secondary_category_id', '=', 'secondary_categories.id')
-        ->join('images as image1', 'products.image1', '=', 'image1.id') ->join('images as image2', 'products.image2', '=', 'image2.id') ->join('images as image3', 'products.image3', '=', 'image3.id') ->join('images as image4', 'products.image4', '=', 'image4.id')
-        ->select('products.id as id', 'products.name as name', 'products.price' ,'products.sort_order as sort_order'
-        ,'products.information', 'secondary_categories.name as category' ,'image1.filename as filename')
-        ->get();
+        //非同期的に送信
+        // dispatch->発火
+        // SendThanksMail::dispatch();
 
-        // ----ブログ記事取得-----
-        $blogs = Blog::orderBy('created_at', 'desc')->take(5)->get();
+        $categories = PrimaryCategory::with('secondary')->get();
+        // $blogs = Blog::all();
         // dd($blogs);
-        return view('user.index', compact('products','blogs'));
+        $blogs = Blog::orderBy('created_at', 'desc')->paginate(3, ["*"], 'blog-page');
+        
+        $products = Product::availableItems()
+        ->selectCategory($request->category ?? '0')
+        ->sortOrder($request->sort)
+        ->searchKeyword($request->keyword)
+        ->paginate($request->pagination ?? '20');
+        
+        // dd($products);
+        
+        return view('user.index', compact('products','categories','blogs'));
     }
 
-    public function show($id) {
-        $product = Product::findOrFail($id);
 
-        return view('user.show', compact('product'));
-    }
 }

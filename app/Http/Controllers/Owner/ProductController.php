@@ -11,6 +11,7 @@ use App\Models\PrimaryCategory;
 use App\Models\Owner;
 use App\Models\Shop;
 use App\Models\Stock;
+use App\Models\User;
 use Illuminate\Support\Facades\DB; //クエリビルダ
 use App\Http\Requests\ProductRequest; 
 
@@ -18,7 +19,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:owners');
+        // $this->middleware('auth:owners');
 
         $this->middleware(function ($request, $next) {
             
@@ -44,13 +45,11 @@ class ProductController extends Controller
 
         // dd($ownerInfo);
 
-        // foreach($ownerInfo as $owner) {
-        //     // dd($owner->shop->product);
-        //     foreach($owner->shop->product as $product) {
-        //         dd($product->imageFirst->filename);
-        //     }
-        // }
-
+        foreach($ownerInfo as $owner) {
+            foreach($owner->shop->product as $product) {
+            //    dd($product);
+            }
+        }
 
         return view('owner.products.index', compact('ownerInfo'));
     }
@@ -245,4 +244,16 @@ class ProductController extends Controller
         ->with(['message' => '商品を削除しました',
         'status' => 'alert']);
     }
+
+        public function show($item) {
+        $product = Product::findOrFail($item);
+        $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+        
+        if ($quantity > 9) {
+            $quantity = 9;
+        }
+
+        return view('user.show', compact('product','quantity'));
+    }
+
 }

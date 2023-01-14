@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePracticesTable extends Migration
+class CreateFavoritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreatePracticesTable extends Migration
      */
     public function up()
     {
-        Schema::create('practices', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained()->nullable();
+            $table->foreignId('user_id')->constrained()->nullable();
             $table->timestamps();
+
+            $table->unique(['product_id', 'user_id']);
         });
     }
 
@@ -26,6 +30,6 @@ class CreatePracticesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practices');
+        Schema::dropIfExists('favorites');
     }
 }

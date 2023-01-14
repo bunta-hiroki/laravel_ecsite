@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -32,6 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // dd($categories);
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -43,10 +45,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
+        // dd('aaa');
         Auth::guard('users')->logout();
-
+        // セッションIDの再発行
         $request->session()->invalidate();
-
+        // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
         return redirect('/');
